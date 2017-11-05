@@ -1,6 +1,7 @@
 package com.cheezycode.techiedesi;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,7 +41,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
     @Override
     public void onBindViewHolder(PostViewHolder holder, int position) {
-        Item item = items.get(position);
+        final Item item = items.get(position);
         holder.postTitle.setText(item.getTitle());
 
         Document document = Jsoup.parse(item.getContent());
@@ -49,6 +50,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         Elements elements = document.select("img");
         Glide.with(context).load(elements.get(0).attr("src")).into(holder.postImage);
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, DetailActivity.class);
+                intent.putExtra("url", item.getUrl());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
